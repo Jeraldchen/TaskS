@@ -27,9 +27,12 @@ public class Main {
         System.out.println("Printing deadlines after sorting");
         printDeadlinesUsingStreams(tasksData);
 
+
         ArrayList<Task> filteredList = filterTaskListUsingStreams(tasksData, "11");
         System.out.println("\n Filtered list of tasks:");
         printData(filteredList);
+        printDataUsingStreams(tasksData);
+        System.out.println("Total number of deadlines counted using streams: " + countDeadlinesUsingStreams(tasksData));
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -42,13 +45,31 @@ public class Main {
         return count;
     }
 
+    private static int countDeadlinesUsingStreams(ArrayList<Task> tasksData) {
+        System.out.println("Calculating count of deadlines using streams");
+        int count = (int) tasksData.stream()
+                .filter((t) -> t instanceof Deadline) // intermediate operation
+                .count(); // terminal operation
+
+        return count;
+    }
+    
     public static void printData(ArrayList<Task> tasksData) {
+        System.out.println("Printing data using iteration");
         for (Task t : tasksData) {
             System.out.println(t);
         }
     }
 
+
+    public static void printDataUsingStreams(ArrayList<Task> tasksData) {
+        System.out.println("Printing data using streams");
+        tasksData.stream() // convert data to stream
+                .forEach(System.out::println); // terminal operator
+    }
+
     public static void printDeadlines(ArrayList<Task> tasksData) {
+        System.out.println("Printing deadline using iteration");
         for (Task t : tasksData) {
             if (t instanceof Deadline) {
                 System.out.println(t);
@@ -56,7 +77,9 @@ public class Main {
         }
     }
 
+
     public static void printDeadlinesUsingStreams(ArrayList<Task> tasks) {
+        System.out.println("Printing deadline using streams");
         tasks.stream()
                 .filter((t) -> t instanceof Deadline) // predicate
                 .sorted((a, b) -> a.getDescription().compareToIgnoreCase(b.getDescription()))
